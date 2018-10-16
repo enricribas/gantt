@@ -32,8 +32,8 @@ export default class Bar {
         this.width = this.gantt.options.column_width * this.duration;
         this.progress_width =
             this.gantt.options.column_width *
-            this.duration *
-            (this.task.progress / 100) || 0;
+                this.duration *
+                (this.task.progress / 100) || 0;
         this.group = createSVG('g', {
             class: 'bar-wrapper ' + (this.task.custom_class || ''),
             'data-id': this.task.id
@@ -49,19 +49,19 @@ export default class Bar {
     }
 
     prepare_helpers() {
-        SVGElement.prototype.getX = function () {
+        SVGElement.prototype.getX = function() {
             return +this.getAttribute('x');
         };
-        SVGElement.prototype.getY = function () {
+        SVGElement.prototype.getY = function() {
             return +this.getAttribute('y');
         };
-        SVGElement.prototype.getWidth = function () {
+        SVGElement.prototype.getWidth = function() {
             return +this.getAttribute('width');
         };
-        SVGElement.prototype.getHeight = function () {
+        SVGElement.prototype.getHeight = function() {
             return +this.getAttribute('height');
         };
-        SVGElement.prototype.getEndX = function () {
+        SVGElement.prototype.getEndX = function() {
             return this.getX() + this.getWidth();
         };
     }
@@ -377,7 +377,10 @@ export default class Bar {
         const bar = this.$bar,
             label = this.group.querySelector('.bar-label');
 
-        if (label.getBBox().width > bar.getWidth()) {
+        if (
+            label.getBBox().width + this.gantt.options.label_padding >
+            bar.getWidth()
+        ) {
             label.classList.add('big');
             label.setAttribute('x', bar.getX() + bar.getWidth() + 5);
         } else {
