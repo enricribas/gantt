@@ -412,31 +412,50 @@ export default class Gantt {
         }
     }
 
+    // highlight today's date
     make_grid_highlights() {
-        // highlight today's date
-        if (this.view_is('Day')) {
-            const x =
-                date_utils.diff(date_utils.today(), this.gantt_start, 'hour') /
-                this.options.step *
-                this.options.column_width;
-            const y = 0;
+        let width;
 
-            const width = this.options.column_width;
-            const height =
-                (this.options.bar_height + this.options.padding) *
-                    this.tasks.length +
-                this.options.header_height +
-                this.options.padding / 2;
+        const x =
+            date_utils.diff(date_utils.today(), this.gantt_start, 'hour') /
+            this.options.step *
+            this.options.column_width;
+        const y = 0;
 
-            createSVG('rect', {
-                x,
-                y,
-                width,
-                height,
-                class: 'today-highlight',
-                append_to: this.layers.grid
-            });
+        if (this.view_is('Quarter Day')) {
+            width = this.options.column_width * 4;
         }
+
+        if (this.view_is('Day')) {
+            width = this.options.column_width;
+        }
+
+        if (this.view_is('Week')) {
+            width = this.options.column_width / 7;
+        }
+
+        if (this.view_is('Month')) {
+            width = this.options.column_width / 30;
+        }
+
+        if (this.view_is('Year')) {
+            width = this.options.column_width / 365;
+        }
+
+        const height =
+            (this.options.bar_height + this.options.padding) *
+                this.tasks.length +
+            this.options.header_height +
+            this.options.padding / 2;
+
+        createSVG('rect', {
+            x,
+            y,
+            width,
+            height,
+            class: 'today-highlight',
+            append_to: this.layers.grid
+        });
     }
 
     make_dates() {
