@@ -635,14 +635,19 @@ export default class Gantt {
         const parent_element = this.$svg.parentElement;
         if (!parent_element) return;
 
-        const hours_before_first_task = date_utils.diff(
-            this.get_oldest_starting_date(),
+        // const hours_before_first_task = date_utils.diff(
+        //     this.get_oldest_starting_date(),
+        //     this.gantt_start,
+        //     'hour'
+        // );
+        const hours_before_today = date_utils.diff(
+            date_utils.today(),
             this.gantt_start,
             'hour'
         );
 
         const scroll_pos =
-            hours_before_first_task /
+            hours_before_today /
                 this.options.step *
                 this.options.column_width -
             this.options.column_width;
