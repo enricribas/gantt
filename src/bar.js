@@ -30,6 +30,10 @@ export default class Bar {
             date_utils.diff(this.task._end, this.task._start, 'hour') /
             this.gantt.options.step;
         this.width = this.gantt.options.column_width * this.duration;
+        // Negative bars can't be drawn
+        if (this.width < 0) {
+            this.width = 20;
+        }
         this.progress_width =
             this.gantt.options.column_width *
                 this.duration *
