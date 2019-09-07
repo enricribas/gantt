@@ -30,6 +30,9 @@ export default class Bar {
             date_utils.diff(this.task._end, this.task._start, 'hour') /
             this.gantt.options.step;
         this.width = this.gantt.options.column_width * this.duration;
+        if (this.gantt.view_is('Day')) {
+            this.width = this.width + this.gantt.options.column_width;
+        }
         // Negative bars can't be drawn
         if (this.width < 0) {
             this.width = 20;
@@ -327,6 +330,9 @@ export default class Bar {
         if (this.gantt.view_is('Month')) {
             const diff = date_utils.diff(task_start, gantt_start, 'day');
             x = diff * column_width / 30;
+        }
+        if (this.gantt.view_is('Day')) {
+            x = x - column_width;
         }
         return x;
     }
