@@ -10,7 +10,9 @@ export default class Gantt {
     constructor(wrapper, tasks, options) {
         this.setup_wrapper(wrapper);
         this.setup_options(options);
-        this.setup_tasks(tasks);
+
+        if (tasks && tasks.length) this.setup_tasks(tasks);
+
         // initialize with default view mode
         this.change_view_mode();
         this.bind_events();
@@ -93,7 +95,7 @@ export default class Gantt {
 
     setup_tasks(tasks) {
         // prepare tasks
-        this.tasks = tasks.map((task, i) => {
+        this.tasks = (tasks || []).map((task, i) => {
             // convert to Date objects
             task._start = date_utils.parse(task.start);
             task._end = date_utils.parse(task.end);
@@ -173,7 +175,10 @@ export default class Gantt {
 
     change_view_mode(mode = this.options.view_mode) {
         this.update_view_scale(mode);
-        this.setup_dates();
+        if (this.tasks.length) {
+            this.setup_dates();
+        }
+
         this.render();
         // fire viewmode_change event
         this.trigger_event('view_change', [mode]);
@@ -271,6 +276,8 @@ export default class Gantt {
 
     render() {
         this.clear();
+        if (!this.tasks.length) return;
+
         this.setup_layers();
         this.make_grid();
         this.make_dates();
@@ -631,15 +638,10 @@ export default class Gantt {
         }
     }
 
-    set_scroll_position() {
+    set_scroll_position(factor = 1) {
         const parent_element = this.$svg.parentElement;
         if (!parent_element) return;
 
-        // const hours_before_first_task = date_utils.diff(
-        //     this.get_oldest_starting_date(),
-        //     this.gantt_start,
-        //     'hour'
-        // );
         const hours_before_today = date_utils.diff(
             date_utils.today(),
             this.gantt_start,
@@ -649,6 +651,7 @@ export default class Gantt {
         const scroll_pos =
             hours_before_today /
                 this.options.step *
+                this.options.centerFactor *
                 this.options.column_width -
             this.options.column_width;
 

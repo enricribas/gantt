@@ -30,10 +30,6 @@ export default class Bar {
             date_utils.diff(this.task._end, this.task._start, 'hour') /
             this.gantt.options.step;
         this.width = this.gantt.options.column_width * this.duration;
-        // XXX: Causes an issue with percentage complete
-        // if (this.gantt.view_is('Day')) {
-        //     this.width = this.width + this.gantt.options.column_width;
-        // }
         // Negative bars can't be drawn
         if (this.width < 0) {
             this.width = 20;
@@ -220,7 +216,11 @@ export default class Bar {
     show_popup() {
         if (this.gantt.bar_being_dragged) return;
 
-        const start_date = date_utils.format(this.task._start, 'MMM D', this.gantt.options.language);
+        const start_date = date_utils.format(
+            this.task._start,
+            'MMM D',
+            this.gantt.options.language
+        );
         const end_date = date_utils.format(
             date_utils.add(this.task._end, -1, 'second'),
             'MMM D',
@@ -232,7 +232,7 @@ export default class Bar {
             target_element: this.$bar,
             title: this.task.name,
             subtitle: subtitle,
-            task: this.task,
+            task: this.task
         });
     }
 
@@ -332,10 +332,7 @@ export default class Bar {
             const diff = date_utils.diff(task_start, gantt_start, 'day');
             x = diff * column_width / 30;
         }
-        // XXX: Causes an issue with percentage complete
-        // if (this.gantt.view_is('Day')) {
-        //     x = x - column_width;
-        // }
+
         return x;
     }
 
